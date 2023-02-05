@@ -20,18 +20,13 @@
                     <td>{{ pd_corp }}</td>
                     <th scope="row">주문수량</th>
                     <td>
-                        <input
-                            type="number"
-                            id="jordAmt"
-                            name="jordAmt"
-                            min="0"
-                            v-model="jordAmt" />
+                        <input type="number" min="0" v-model="jordAmt" />
                     </td>
                 </tr>
 
                 <tr>
                     <th scope="row">판매가격</th>
-                    <td>{{ pd_price }}</td>
+                    <td>{{ comma(pd_price) }}</td>
 
                     <th scope="row">납품희망일</th>
                     <td>
@@ -57,7 +52,7 @@
             </tbody>
         </table>
         <div class="btn_areaC mt30">
-            <a @click="insBasket()" class="btn btn-primary">
+            <a @click="insBasket()" class="btn btn-success">
                 <span>장바구니 담기</span>
             </a>
             &nbsp;&nbsp;&nbsp;
@@ -91,6 +86,12 @@ export default {
     },
     components: {},
     computed: {},
+    watch: {
+        // Input 숫자 아닌 문자값 입력시 대체
+        number: function () {
+            return (this.jordAmt = this.jordAmt.replace(/[^0-9]/g, '')); //정규식 사용
+        },
+    },
     // html 로딩, 가상 dom 실행, 이 두 개 연결 시 작동
     mounted: function () {
         /* modelCode 들고 가서 상세내역 가져와서 리스트에 넣어주기 */
@@ -111,7 +112,7 @@ export default {
                 vm.pd_detail = response.data.result.pd_detail;
                 if (response.data.result.pd_nadd != null)
                     vm.imagepath = response.data.result.pd_nadd;
-                else vm.imagepath = '';
+                else vm.imagepath = '/serverfile\\product\\product_none.gif';
             })
             .catch(function (error) {
                 alert('에러! API 요청에 오류가 있습니다. ' + error);
@@ -164,7 +165,6 @@ export default {
                     denyButtonText: '아니요',
                 })
                 .then((result) => {
-                    /* Read more about isConfirmed, isDenied below */
                     if (result.isConfirmed) jordIn = '1';
 
                     param.append('modelCode', this.model_code);
@@ -184,6 +184,9 @@ export default {
                             alert('에러! API 요청에 오류가 있습니다. ' + error);
                         });
                 });
+        },
+        comma: function (num) {
+            return String(num).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
         },
     },
     created() {

@@ -146,11 +146,19 @@ export default {
         // 지시서 작성완료
         insDirection: function () {
             console.log('insDirection');
-            console.log(this.bordDetailList.length);
 
             let vm = this;
             let direcList = {};
             let param = new URLSearchParams();
+
+            if (this.checkValue() != true) return;
+
+            if (this.bordDetailList.length == 0)
+                return this.$swal(
+                    '',
+                    '발주지시서 추가 버튼을 누르고 완료버튼을 눌러주세요.',
+                    'error'
+                );
 
             for (let i = 0; i < this.bordDetailList.length; i++) {
                 direcList[i] = {};
@@ -190,8 +198,10 @@ export default {
         showBordDetail: function () {
             console.log('showBordDetail');
 
+            if (this.checkValue() != true) return;
+
             this.detailLength++;
-            
+
             this.bordDetailList[this.detailLength] = [];
             this.bordDetailList[this.detailLength].jordCode = this.jordCode;
             this.bordDetailList[this.detailLength].modelCode = this.modelCode;
@@ -210,6 +220,18 @@ export default {
 
             this.bordDetailList.splice(num, 1);
             this.detailLength--;
+        },
+        // 값 체크
+        checkValue: function () {
+            let check = false;
+
+            if (this.whCode == '') return this.$swal('', '창고를 선택하세요.', 'error');
+            if (this.bordAmt == '' || this.bordAmt == 0)
+                return this.$swal('', '수량을 입력하세요.', 'error');
+
+            check = true;
+
+            return check;
         },
     },
     created() {

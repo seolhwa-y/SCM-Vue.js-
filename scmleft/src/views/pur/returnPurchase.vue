@@ -25,7 +25,10 @@
                             v-model="keyword"
                             placeholder="검색어를 입력하세요."
                             style="height: 27px" />
-                        <a class="btnType blue" v-on:click="searchBordReturnList()">
+                        <a
+                            class="btn btn-primary"
+                            style="color: white"
+                            v-on:click="searchBordReturnList()">
                             <span>검색</span>
                         </a>
                     </span>
@@ -57,7 +60,7 @@
                             <td>{{ item.companyName }}</td>
                             <td>{{ item.pdName }}</td>
                             <td>{{ item.dirDate }}</td>
-                            <td v-if="item.reType == '2'" style="color: gray; font-weight: bold">
+                            <td v-if="item.reType == '2'" style="color: red; font-weight: bold">
                                 {{ item.typeName }}
                             </td>
                             <td
@@ -67,7 +70,7 @@
                             </td>
                             <td v-else-if="item.reType == 1">
                                 <a
-                                    class="btnType blue"
+                                    class="btn btn-primary"
                                     v-on:click="showReturnDirectionDetail(item.reCode)"
                                     ><span>입금</span></a
                                 >

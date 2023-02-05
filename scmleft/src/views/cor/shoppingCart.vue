@@ -35,10 +35,10 @@
                             <input type="checkbox" name="isCheck" />
                         </td>
                         <td>
-                            <!-- <img
-                                src="/serverfile\\product\\product_none.gif"
-                                v-if="item.pdNadd == null" />
-                            <img src='"{{ item.pdNadd }}"' v-else /> -->
+                            <img
+                                v-if="item.pdNadd == null"
+                                src="/serverfile\\product\\product_none.gif" />
+                            <img v-else src='"{{ item.pdNadd }}"' />
                             {{ item.pdName }}
                         </td>
                         <td>{{ comma(item.pdPrice) }}</td>
@@ -90,7 +90,7 @@ export default {
                 .then(function (response) {
                     console.log(response);
                     console.log(response.data);
-                    console.log(response.data.shoppingCartList);
+
                     vm.basketList = response.data.shoppingCartList;
                     vm.basketTotal = response.data.basketTotal;
                 })
@@ -147,37 +147,48 @@ export default {
             if (document.querySelectorAll("input[name='isCheck']:checked").length == 0)
                 return this.$swal('제품을 선택해주세요.');
 
-            if (confirm('입금도 같이 진행하시겠습니까?') == true) jordIn = '1';
-
-            for (let i = 0; i < checkBox.length; i++) {
-                if (checkBox[i].checked == true) {
-                    ii++;
-
-                    console.log('modelCode check :: ' + this.basketList[i].modelCode);
-
-                    this.productList[ii] = {};
-                    this.productList[ii].loginId = this.basketList[i].loginId;
-                    this.productList[ii].modelCode = this.basketList[i].modelCode;
-                    this.productList[ii].jordAmt = this.basketList[i].baAmt;
-                    this.productList[ii].jordWishdate = this.basketList[i].baWishdate;
-                    this.productList[ii].jordIn = jordIn;
-                }
-            }
-
-            param.append('list', JSON.stringify(this.productList));
-            console.log(this.productList);
-            console.log(JSON.stringify(this.productList));
-
-            this.axios
-                .post('/cor/insJorder_vue', param)
-                .then(function (response) {
-                    console.log(response);
-                    console.log(response.data);
-
-                    vm.searchCart();
+            this.$swal
+                .fire({
+                    title: '입금도 같이 진행하시겠습니까?',
+                    showDenyButton: true,
+                    showCancelButton: false,
+                    confirmButtonText: '네',
+                    denyButtonText: '아니요',
                 })
-                .catch(function (error) {
-                    alert('에러! API 요청에 오류가 있습니다. ' + error);
+                .then((result) => {
+                    /* Read more about isConfirmed, isDenied below */
+                    if (result.isConfirmed) jordIn = '1';
+
+                    for (let i = 0; i < checkBox.length; i++) {
+                        if (checkBox[i].checked == true) {
+                            ii++;
+
+                            console.log('modelCode check :: ' + this.basketList[i].modelCode);
+
+                            this.productList[ii] = {};
+                            this.productList[ii].loginId = this.basketList[i].loginId;
+                            this.productList[ii].modelCode = this.basketList[i].modelCode;
+                            this.productList[ii].jordAmt = this.basketList[i].baAmt;
+                            this.productList[ii].jordWishdate = this.basketList[i].baWishdate;
+                            this.productList[ii].jordIn = jordIn;
+                        }
+                    }
+
+                    param.append('list', JSON.stringify(this.productList));
+                    console.log(this.productList);
+                    console.log(JSON.stringify(this.productList));
+
+                    this.axios
+                        .post('/cor/insJorder_vue', param)
+                        .then(function (response) {
+                            console.log(response);
+                            console.log(response.data);
+
+                            vm.searchCart();
+                        })
+                        .catch(function (error) {
+                            alert('에러! API 요청에 오류가 있습니다. ' + error);
+                        });
                 });
         },
         page: function () {

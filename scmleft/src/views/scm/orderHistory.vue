@@ -10,10 +10,10 @@
             <p class="conTitle">
                 <span>일별수주내역</span>
                 <span class="fr">
-                    <input type="text" placeholder="검색어를 입력하세요." style="height: 27px" />
+                    <!-- <input type="text" placeholder="검색어를 입력하세요." style="height: 27px" />
                     <a class="btn btn-primary mx-2" v-on:click="searchProductList()">
                         <span>검색</span>
-                    </a>
+                    </a> -->
                 </span>
             </p>
             <table class="col">
@@ -118,7 +118,7 @@ export default {
             endDate: '',
             currentPage: 1, //  현재 페이지
             listCount: 10, // 리스트 뿌릴 사이즈
-          //  pageCount: 10, // 페이징 사이즈
+            //  pageCount: 10, // 페이징 사이즈
             totalPage: 1, // 페이징
             totalCnt: 0, // 리스트의 총 사이즈
         };

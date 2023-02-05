@@ -173,6 +173,9 @@ export default {
             let vm = this;
             let param = new URLSearchParams();
 
+            if (this.checkValue() != true) return;
+            if (this.deliCode == '') return this.$swal('', '배송담당자를 선택하세요.', 'error');
+
             param.append('dirType', '2');
             param.append('jordCode', this.jordCode);
             param.append('modelCode', this.modelCode);
@@ -212,6 +215,8 @@ export default {
         showShipDetail: function () {
             console.log('showBordDetail');
 
+            if (this.checkValue() != true) return;
+
             if (this.shipDetailList.length == 1)
                 return this.$swal('배송지시서는 한건만 추가 가능합니다.');
 
@@ -232,7 +237,28 @@ export default {
 
             this.shipDetailList.splice(0, 1);
         },
+        // 값 체크
+        checkValue: function () {
+            let check = false;
+
+            if (this.whCode == '') return this.$swal('', '창고를 선택하세요.', 'error');
+            if (this.shipAmt == '' || this.shipAmt == 0)
+                return this.$swal('', '수량을 입력하세요.', 'error');
+            if (this.whStock - this.shipAmt < 0)
+                return this.$swal(
+                    '',
+                    '해당 창고의 재고수량보다 수량이 많습니다. 다른 창고를 선택하거나 발주지시서를 작성하세요.',
+                    'error'
+                );
+            if (this.jordAmt != this.shipAmt)
+                return this.$swal('', '주문수량과 같지 않습니다. 다시 작성하세요.', 'error');
+
+            check = true;
+
+            return check;
+        },
     },
+
     created() {
         // 자식요소에서 부모 요소 method 호출
     },

@@ -38,17 +38,20 @@
                         <th scope="col">판매가격</th>
                     </tr>
                 </thead>
-                <tbody v-for="item in productList" :key="item.model_code">
-                    <tr @click="detailview(item.model_code)">
+                <tbody>
+                    <tr
+                        v-for="item in productList"
+                        :key="item.model_code"
+                        @click="detailview(item.model_code)">
                         <td>{{ item.model_code }}</td>
                         <td>{{ item.model_name }}</td>
                         <td>{{ item.pd_code }}</td>
                         <td>{{ item.pd_name }}</td>
                         <td>{{ item.pd_corp }}</td>
-                        <td>{{ item.pd_price }}</td>
+                        <td>{{ comma(item.pd_price) }}</td>
                     </tr>
                     <tr v-if="productList.length == 0">
-                        <td colspan="6">검색된 데이터가 없습니다.</td>
+                        <td colspan="6">검색된 제품이 없습니다.</td>
                     </tr>
                 </tbody>
             </table>
@@ -137,6 +140,9 @@ export default {
                 console.log('Close : ' + popupparam);
                 this.searchProductList(); // 모달이 닫히면서 다시 리스트 뽑아오기
             };
+        },
+        comma: function (num) {
+            return String(num).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
         },
         page: function () {
             var total = this.totalCnt;

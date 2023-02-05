@@ -106,7 +106,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="item in orderReturnDetailList">
+                    <tr v-for="item in orderReturnDetailList" :key="item.bordCode">
                         <td>
                             <input type="checkBox" name="isCheck" />
                             <!-- 반품처리 및 재고처리에 필요한 체크박스 -->
@@ -201,6 +201,8 @@ export default {
             let vm = this;
             let params = new URLSearchParams();
 
+            if (pageNum != null) this.currentPage = pageNum;
+
             params.append('pageNum', this.currentPage);
             params.append('listCount', this.listCount);
             params.append('type', this.type);
@@ -213,6 +215,7 @@ export default {
                 .then(function (response) {
                     console.log(response.data);
 
+                    vm.orderReturnDetailList = [];
                     vm.orderReturnList = response.data.result.orderReturnList;
                     vm.currentPage = parseInt(response.data.result.pageNum);
                     vm.totalCnt = response.data.result.orderReturnCount;
@@ -229,6 +232,7 @@ export default {
             let vm = this;
             let params = new URLSearchParams();
 
+            if (pageNum != null) this.currentPage2 = pageNum;
             if (loginId != null) this.loginId = loginId;
 
             params.append('pageNum', this.currentPage2);
